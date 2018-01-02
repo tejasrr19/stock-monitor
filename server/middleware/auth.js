@@ -1,10 +1,10 @@
-var auth = function*(next) {
-  if(this.isAuthenticated()) {
-    console.log('PASSPORT USER ---->', this.passport.user);
-    this.user = this.passport.user;
-    yield next;
+var auth = async (ctx, next) => {
+  console.log('trying to auth');
+  if(ctx.isAuthenticated()) {
+    ctx.user = ctx.state.user;
+    await next();
   } else {
-    this.throw(408);
+    ctx.throw(408);
   }
 };
 

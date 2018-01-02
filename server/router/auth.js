@@ -42,6 +42,11 @@ router.post('/login', passport.authenticate('local', {}), async (ctx, next) => {
   ctx.body = ctx.state.user;
 });
 
+router.get('/logout', async (ctx, next) => {
+  ctx.logout();
+  ctx.body = "Logged Out!";
+});
+
 router.post('/user', async(ctx, next) => {
   var user = ctx.request.body;
   try {

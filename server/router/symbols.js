@@ -5,6 +5,7 @@ const Symbol = require('../models/symbols.js');
 const app = new Koa();
 
 router.get('/symbols', async (ctx, next) => {
+  console.log('GETTING SYMBOLS');
   ctx.body = await Symbol.find();
   await next();
 });
