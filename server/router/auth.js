@@ -10,7 +10,7 @@ const app = new Koa();
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.serializeUser((user, done) => { done(null, user._id.toString()); });
+passport.serializeUser((user, done) => { done(null, user); });
 
 
 passport.deserializeUser(async function(user, done) {
@@ -40,6 +40,7 @@ passport.use(new LocalStrategy({ usernameField: 'email'}, (email, password, done
 // Router
 router.post('/login', passport.authenticate('local', {}), async (ctx, next) => {
   ctx.body = ctx.state.user;
+  await next();
 });
 
 router.get('/logout', async (ctx, next) => {

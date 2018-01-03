@@ -22,8 +22,9 @@ db.once('open', function() {
 // create an instance of the Koa object
 const app = new Koa();
 
-app.keys = ['stockmon03051984'];
-app.use(session(app));
+// Middleware
+app.keys = ['stockmon_cookie::ius45jbipsdhip42oj59g'];
+app.use(session({ key: 'stockmon:sess' }, app));
 app.use(cors({
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
@@ -35,8 +36,8 @@ app.use(mount(require('./router/auth.js')));
 app.use(authMiddleware);
 
 // mount the route
-app.use(mount(require('./router/stock.js')));
-app.use(mount(require('./router/symbols.js')));
+app.use(mount('/1.0', require('./router/stock.js')));
+app.use(mount('/1.0', require('./router/symbols.js')));
 
 if(require.main === module) {
      app.listen(3001); // default

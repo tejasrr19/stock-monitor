@@ -6,16 +6,36 @@ const app = new Koa();
 
 app.use(cors());
 
+const baseURL = 'https://api.iextrading.com/1.0/stock'
+
 // Route to handle GET request
-router.get('/stock-history/:symbol/:range', async (ctx, next) => {
+router.get('/stock/:symbol/:range', async (ctx, next) => {
   const symbol = ctx.params.symbol;
   const range = ctx.params.range;
-  const baseURL = `https://api.iextrading.com/1.0/stock/${symbol}/chart/${range}`;
-  var data = await request(baseURL);
-  data = JSON.parse(data);
+  const url = `${baseURL}/${symbol}/chart/${range}`;
 
-  ctx.body = data;
-  await next();
+  try {
+    var data = await request(url);
+    data = JSON.parse(data);
+    ctx.body = data;
+    await next();
+  } catch(e) {
+    console.error(e);
+  }
+});
+
+router.get('/quote/:symbol', async(ctx, next) => {
+  const symbol = ctx.params.symbol;
+  const url = `${baseURL}/${symbol}/quote?displayPercent=true`;
+
+  try {
+    var data = await request(url);
+    data = JSON.parse(data);
+    ctx.body = data;
+    await next();
+  } catch(e) {
+    console.error(e);
+  }
 });
 
 app.use(router.routes());
